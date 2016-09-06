@@ -15,10 +15,6 @@ html {
      max-width: 64rem;
  }
  
- .container.narrow {
-     max-width: 56rem;
- }
- 
  /* Medium and small screens (640px) */
  @media (min-width: 640px) {
 
@@ -105,4 +101,3 @@ html {
      color: rgb(233,50,117);
      background-color: white;
  }
-
