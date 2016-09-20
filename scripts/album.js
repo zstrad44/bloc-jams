@@ -7,7 +7,7 @@ var setSong = function(songNumber) {
 	currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
 
 	currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
-         // #2
+         
          formats: [ 'mp3' ],
          preload: true
      });
@@ -126,40 +126,64 @@ var getSongNumberCell = function(number) {
      $albumReleaseInfo.text(album.year + ' ' + album.label);
      $albumImage.attr('src', album.albumArtUrl);
  
-     // #3
+     
      $albumSongList.empty();
  
-     // #4
+     
      for (var i = 0; i < album.songs.length; i++) {
          var $newRow = createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
          $albumSongList.append($newRow);
      }
  };
 
+ var setCurrentTimeInPlayerBar = function(currentTime) {
+    var $currentTimeElement = $('.seek-control .current-time');
+    $currentTimeElement.text(currentTime); 
+};
+
+var setTotalTimeInPlayerBar = function(totalTime) { 
+    var $totalTimeElement = $('.seek-control .total-time');
+    $totalTimeElement.text(totalTime); 
+};
+
+var filterTimeCode = function(timeInSeconds) {
+    var seconds = Number.parseFloat(timeInSeconds);
+    var wholeSeconds = Math.floor(seconds);
+    var minutes = Math.floor(wholeSeconds / 60);
+    
+    var remainingSeconds = wholeSeconds % 60;
+    var output = minutes + ':';
+    
+    if (remainingSeconds < 10) {
+        output += '0';   
+    }
+    
+    output += remainingSeconds;
+    return output;
+};
+
  var updateSeekBarWhileSongPlays = function() {
-     if (currentSoundFile) {
-         // #10
-         currentSoundFile.bind('timeupdate', function(event) {
-             // #11
-             var seekBarFillRatio = this.getTime() / this.getDuration();
-             var $seekBar = $('.seek-control .seek-bar');
- 
-             updateSeekPercentage($seekBar, seekBarFillRatio);
-         });
-     }
- };
+    if (currentSoundFile) {
+        currentSoundFile.bind('timeupdate', function(event) {
+            var currentTime = this.getTime();
+            var songLength = this.getDuration();
+            var seekBarFillRatio = currentTime / songLength;
+            var $seekBar = $('.seek-control .seek-bar');
+            updateSeekPercentage($seekBar, seekBarFillRatio);
+            setCurrentTimeInPlayerBar(filterTimeCode(currentTime));
+        });
+    }
+};
 
  var updateSeekPercentage = function($seekBar, seekBarFillRatio) {
     var offsetXPercent = seekBarFillRatio * 100;
-    // #1
     offsetXPercent = Math.max(0, offsetXPercent);
     offsetXPercent = Math.min(100, offsetXPercent);
- 
-    // #2
+    
     var percentageString = offsetXPercent + '%';
     $seekBar.find('.fill').width(percentageString);
     $seekBar.find('.thumb').css({left: percentageString});
- };
+};
 
  var setupSeekBars = function() {
      var $seekBars = $('.player-bar .seek-bar');
@@ -196,7 +220,7 @@ var getSongNumberCell = function(number) {
             updateSeekPercentage($seekBar, seekBarFillRatio);
         });
  
-         // #10
+         
          $(document).bind('mouseup.thumb', function() {
              $(document).unbind('mousemove.thumb');
              $(document).unbind('mouseup.thumb');
