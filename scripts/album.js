@@ -7,7 +7,7 @@ var setSong = function(songNumber) {
 var getSongNumberCell = function(number) {
  	return $('.song-item-number[data-song-number="' + number + '"]')
 
-}
+};
 
  var createSongRow = function(songNumber, songName, songLength) {
      var template =
@@ -27,13 +27,12 @@ var getSongNumberCell = function(number) {
 	 if (currentlyPlayingSongNumber !== null) {
 		
 		var currentlyPlayingCell = getSongNumber(currentlyPlayingSongNumber);
-		currentlyPlayingCell.html(currentlyPlayingSongNumber);
+		currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
 	}
 	 if (currentlyPlayingSongNumber !== songNumber) {
 		
 		$(this).html(pauseButtonTemplate);
 		setSong(songNumber)
-		currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
 		updatePlayerBarSong();
 
 	} else if (currentlyPlayingSongNumber === songNumber) {
@@ -122,8 +121,8 @@ var nextSong = function() {
     $('.main-controls .play-pause').html(playerBarPauseButton);
     
     var lastSongNumber = getLastSongNumber(currentSongIndex);
-    var $nextSongNumberCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
-    var $lastSongNumberCell = $('.song-item-number[data-song-number="' + lastSongNumber + '"]');
+    var $nextSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
+    var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
     
     $nextSongNumberCell.html(pauseButtonTemplate);
     $lastSongNumberCell.html(lastSongNumber);
@@ -157,8 +156,8 @@ var previousSong = function() {
     $('.main-controls .play-pause').html(playerBarPauseButton);
     
     var lastSongNumber = getLastSongNumber(currentSongIndex);
-    var $previousSongNumberCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
-    var $lastSongNumberCell = $('.song-item-number[data-song-number="' + lastSongNumber + '"]');
+    var $previousSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
+    var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
     
     $previousSongNumberCell.html(pauseButtonTemplate);
     $lastSongNumberCell.html(lastSongNumber);
